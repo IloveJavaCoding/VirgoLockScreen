@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">VirgoLockScreen</string>
+    <string name="main_self_auto">开机自启</string>
+    <string name="main_self_lock">启用锁屏</string>
+
+    <string name="main_yes">yes</string>
+    <string name="main_no">no</string>
+</resources>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="VirgoTextClockView">
+        <attr name="vtcTextColorMain" format="color|reference" />
+        <attr name="vtcTextColorSec" format="color|reference" />
+        <attr name="vtcColorBg" format="color|reference" />
+        <attr name="vtcTextSizeMain" format="dimension|reference" />
+        <attr name="vtcTextSizeClock" format="dimension|reference" />
+        <attr name="vtcRadiusH" format="dimension|reference" />
+        <attr name="vtcRadiusM" format="dimension|reference" />
+        <attr name="vtcRadiusS" format="dimension|reference" />
+        <attr name="vtcOffset" format="dimension|reference" />
+    </declare-styleable>
+</resources>
