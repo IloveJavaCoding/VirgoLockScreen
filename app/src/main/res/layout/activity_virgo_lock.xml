@@ -8,17 +8,10 @@
     tools:context=".ui.VirgoLockActivity">
 
     <com.nepalese.virgolockscreen.view.VirgoTextClockView
+        android:id="@+id/clockLock"
         android:layout_centerInParent="true"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:vtcTextColorMain="@color/colorRed"
-        app:vtcTextColorSec="@color/colorGray"
-        app:vtcTextSizeMain="14sp"
-        app:vtcTextSizeClock="22sp"
-        app:vtcOffset="10dp"
-        app:vtcRadiusH="50dp"
-        app:vtcRadiusM="95dp"
-        app:vtcRadiusS="150dp"/>
+        android:layout_height="match_parent"/>
 
     <ImageView
         android:id="@+id/imgLock"
@@ -27,5 +20,6 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="50dp"
-        android:src="@mipmap/img_lock"/>
+        android:src="@mipmap/img_lock"
+        android:alpha="0.8"/>
 </RelativeLayout>

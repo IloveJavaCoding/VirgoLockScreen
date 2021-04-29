@@ -5,4 +5,16 @@
 
     <string name="main_yes">yes</string>
     <string name="main_no">no</string>
+    <string name="preview_main">预览效果</string>
+
+    <string name="main_color_select">高亮颜色：</string>
+    <string name="main_color_default">默认颜色：</string>
+    <string name="main_size_center">中心字体：(%s)</string>
+    <string name="main_size_clock">时钟字体：(%s)</string>
+
+    <string name="main_clock_offset">中心偏移：(%s)</string>
+    <string name="main_radius_hour">时钟半径：(%s)</string>
+    <string name="main_radius_minute">分钟半径：(%s)</string>
+    <string name="main_radius_second">秒钟半径：(%s)</string>
+    <string name="main_save">保存</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.nepalese.virgolockscreen.ui;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -7,11 +8,17 @@ import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.nepalese.virgolockscreen.R;
+import com.nepalese.virgolockscreen.data.ShareDao;
+import com.nepalese.virgolockscreen.data.clockBean;
+import com.nepalese.virgolockscreen.view.VirgoTextClockView;
 import com.nepalese.virgosdk.Util.WinowUtil;
 
 public class VirgoLockActivity extends AppCompatActivity {
     private static final String TAG = "VirgoLockActivity";
 
+    private Context context;
+
+    private VirgoTextClockView clockView;
     private ImageView imgLock;
 
     @Override
@@ -33,10 +40,18 @@ public class VirgoLockActivity extends AppCompatActivity {
     }
 
     private void initUi() {
+        context = getApplicationContext();
+        clockView = findViewById(R.id.clockLock);
         imgLock = findViewById(R.id.imgLock);
     }
 
     private void setData() {
+        clockBean bean = ShareDao.getClockConfig(context);
+        if(bean !=null){
+            clockView.setConfig(bean);
+        }else{
+            //默认值
+        }
     }
 
     private void setListener() {

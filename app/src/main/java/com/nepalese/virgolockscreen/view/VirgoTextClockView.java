@@ -18,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.nepalese.virgolockscreen.R;
+import com.nepalese.virgolockscreen.data.clockBean;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -381,13 +382,56 @@ public class VirgoTextClockView extends View {
 
     public void setmColorMain(@ColorInt int mColorMain) {
         this.mColorMain = mColorMain;
+        mPaintMain.setColor(mColorMain);
+        mPaintClock.setColor(mColorMain);
     }
 
     public void setmColorSecond(@ColorInt int mColorSecond) {
         this.mColorSecond = mColorSecond;
+        mPaintSecond.setColor(mColorSecond);
     }
 
     public void setmColorBg(@ColorInt int mColorBg) {
         this.mColorBg = mColorBg;
+    }
+
+    public void setmRadiusH(int mRadiusH) {
+        this.mRadiusH = mRadiusH;
+    }
+
+    public void setmRadiusM(int mRadiusM) {
+        this.mRadiusM = mRadiusM;
+    }
+
+    public void setmRadiusS(int mRadiusS) {
+        this.mRadiusS = mRadiusS;
+    }
+
+
+    public void setmTextSizeMain(float mTextSizeMain) {
+        this.mTextSizeMain = mTextSizeMain;
+        mPaintMain.setTextSize(mTextSizeMain);
+        mPaintSecond.setTextSize(mTextSizeMain);
+    }
+
+    public void setmTextSizeClock(float mTextSizeClock) {
+        this.mTextSizeClock = mTextSizeClock;
+        mPaintClock.setTextSize(mTextSizeClock);
+    }
+
+    public void setmOffset(float mOffset) {
+        this.mOffset = mOffset;
+    }
+
+    public void setConfig(clockBean bean){
+        this.setmColorMain(Color.parseColor(bean.getColorSelect()));
+        this.setmColorSecond(Color.parseColor(bean.getColorDefault()));
+
+        this.setmTextSizeMain(bean.getSizeClock());
+        this.setmTextSizeClock(bean.getSizeCenter());
+        this.setmOffset(bean.getOffset());
+        this.setmRadiusH(bean.getrHour());
+        this.setmRadiusM(bean.getrMinute());
+        this.setmRadiusS(bean.getrSecond());
     }
 }
