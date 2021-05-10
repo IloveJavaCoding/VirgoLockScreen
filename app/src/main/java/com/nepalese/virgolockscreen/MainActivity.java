@@ -1,30 +1,40 @@
 package com.nepalese.virgolockscreen;
 
+import android.Manifest;
+import android.app.AppOpsManager;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
+import android.provider.Settings;
+import android.util.Log;
+import android.view.View;
+import android.widget.SeekBar;
+import android.widget.TextView;
+
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.app.ActivityCompat;
 
-import android.Manifest;
-import android.content.Context;
-import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.CompoundButton;
-import android.widget.SeekBar;
-import android.widget.TextView;
-
 import com.nepalese.virgolockscreen.data.ShareDao;
 import com.nepalese.virgolockscreen.data.clockBean;
 import com.nepalese.virgolockscreen.view.VirgoTextClockView;
+import com.nepalese.virgosdk.Util.DialogUtil;
 import com.nepalese.virgosdk.Util.SystemUtil;
+
+import java.lang.reflect.Method;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
     private static final int ACTION_REQUEST_PERMISSIONS = 0x001;
+    private boolean needCheck = false;
+
     private final String[] NEEDED_PERMISSIONS = {
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.INTERNET,
@@ -144,7 +154,14 @@ public class MainActivity extends AppCompatActivity {
 
         switchAuto.setOnCheckedChangeListener((buttonView, isChecked) -> ShareDao.setSelfAuto(context, isChecked));
 
-        switchLock.setOnCheckedChangeListener((buttonView, isChecked) -> ShareDao.setSelfLock(context, isChecked));
+        switchLock.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if(isChecked){
+                needCheck = true;
+                checkNeededPermissions(context);
+            }else {
+                needCheck = false;
+            }
+        });
 
         sbSizeCenter.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -271,6 +288,57 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //检验是否有所需权限：锁屏显示、后台弹出界面、显示悬浮窗
+    private void checkNeededPermissions(Context context){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            if(!Settings.canDrawOverlays(context) || !canShowLockView(context)){
+                DialogUtil.showMsgDialog(this, "设置权限", "打开锁屏显示、后台弹出界面、显示悬浮窗权限！", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which){
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                dialog.dismiss();
+                                SystemUtil.showToast(context, "拒绝权限！！！");
+                                ShareDao.setSelfLock(context, false);
+                                needCheck = false;
+                                break;
+                            case DialogInterface.BUTTON_POSITIVE:
+                                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                intent.setData(Uri.parse("package:" + getPackageName()));
+                                startActivity(intent);
+                                break;
+                        }
+                    }
+                });
+            }else{
+                SystemUtil.showToast(context, "获取权限成功！");
+                ShareDao.setSelfLock(context, true);
+            }
+        }
+    }
+
+    /**
+     * 小米后台锁屏检测方法
+     * @param context
+     * @return
+     */
+    public static boolean canShowLockView(Context context) {
+        //>=21
+        AppOpsManager ops = (AppOpsManager) context.getSystemService(Context.APP_OPS_SERVICE);
+        try {
+            int op = 10020; // >= 23
+            // ops.checkOpNoThrow(op, uid, packageName)
+            Method method = ops.getClass().getMethod("checkOpNoThrow", new Class[]{int.class, int.class, String.class});
+            Integer result = (Integer) method.invoke(ops, op,  android.os.Process.myUid(), context.getPackageName());
+            Log.i(TAG, "canShowLockView: " + result);
+            return result == AppOpsManager.MODE_ALLOWED;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -286,6 +354,32 @@ public class MainActivity extends AppCompatActivity {
                 Log.i(TAG, "onRequestPermissionsResult: ");
                 finish();
             }
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(needCheck){
+            checkNeededPermissions(context);
+        }
+    }
+
+    /**
+     * 检验是否有悬浮权限，并跳转到设置页
+     */
+    private void checkAlertPermission(Context context, int requsetCode) {
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (!Settings.canDrawOverlays(context)) {
+                    //若未授权则请求权限
+                    Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
+                    intent.setData(Uri.parse("package:" + getPackageName()));
+                    startActivityForResult(intent, requsetCode);
+                }
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
         }
     }
 }

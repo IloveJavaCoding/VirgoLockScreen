@@ -31,7 +31,7 @@ public class ShareDao {
     }
 
     public static boolean getSelfLock(Context context){
-        return SPUtil.getBoolean(context, MAIN_CONFIG, KEY_SELF_LOCK, true);
+        return SPUtil.getBoolean(context, MAIN_CONFIG, KEY_SELF_LOCK, false);
     }
 
     public static void setSelfLock(Context context, boolean isOn){

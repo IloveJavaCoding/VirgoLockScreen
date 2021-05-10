@@ -3,14 +3,11 @@ package com.nepalese.virgolockscreen.service;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
@@ -26,7 +23,6 @@ import androidx.core.app.NotificationCompat;
 import com.nepalese.virgolockscreen.data.Constants;
 import com.nepalese.virgolockscreen.data.ShareDao;
 import com.nepalese.virgolockscreen.ui.VirgoLockActivity;
-import com.nepalese.virgosdk.Util.BitmapUtil;
 
 /**
  * @author nepalese on 2021/4/27 09:57

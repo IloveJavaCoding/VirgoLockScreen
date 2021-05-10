@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">VirgoLockScreen</string>
+    <string name="app_name">VirgoLock</string>
     <string name="main_self_auto">开机自启</string>
     <string name="main_self_lock">启用锁屏</string>
 

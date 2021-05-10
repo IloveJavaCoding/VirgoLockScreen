@@ -39,8 +39,11 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" /> <!-- 禁用系统锁屏 -->
-    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" /> <!-- 自启 -->
+    <!-- 悬浮窗-->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <!-- 禁用系统锁屏 -->
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+    <!-- 自启 -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <uses-permission android:name="android.permission.INTERNET" />
