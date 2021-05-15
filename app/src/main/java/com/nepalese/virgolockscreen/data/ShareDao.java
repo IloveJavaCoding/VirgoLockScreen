@@ -14,11 +14,11 @@ public class ShareDao {
     private static final String KEY_SELF_LOCK = "self_lock";//锁频
     private static final String KEY_CLOCK_CONFIG = "clock_config";//时钟属性
 
-    public static clockBean getClockConfig(Context context){
-        return SPUtil.getObject(context, MAIN_CONFIG, KEY_CLOCK_CONFIG, clockBean.class);
+    public static ClockBean getClockConfig(Context context){
+        return SPUtil.getObject(context, MAIN_CONFIG, KEY_CLOCK_CONFIG, ClockBean.class);
     }
 
-    public static void setClockConfig(Context context, clockBean bean){
+    public static void setClockConfig(Context context, ClockBean bean){
         SPUtil.saveObject(context, MAIN_CONFIG, KEY_CLOCK_CONFIG, bean);
     }
 

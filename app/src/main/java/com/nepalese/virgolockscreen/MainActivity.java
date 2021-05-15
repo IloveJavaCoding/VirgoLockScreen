@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,23 +17,26 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.app.ActivityCompat;
 
+import com.nepalese.virgocomponent.view.color.VirgoColorBoard;
 import com.nepalese.virgolockscreen.data.ShareDao;
-import com.nepalese.virgolockscreen.data.clockBean;
+import com.nepalese.virgolockscreen.data.ClockBean;
 import com.nepalese.virgolockscreen.view.VirgoTextClockView;
+import com.nepalese.virgosdk.Util.ColorUtil;
 import com.nepalese.virgosdk.Util.DialogUtil;
 import com.nepalese.virgosdk.Util.SystemUtil;
 
 import java.lang.reflect.Method;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements VirgoColorBoard.ColorCallback{
     private static final String TAG = "MainActivity";
 
     private static final int ACTION_REQUEST_PERMISSIONS = 0x001;
+    private static final int TAG_COLOR_SELECT = 0;
+    private static final int TAG_COLOR_DEFAULT = 1;
     private boolean needCheck = false;
 
     private final String[] NEEDED_PERMISSIONS = {
@@ -44,13 +48,15 @@ public class MainActivity extends AppCompatActivity {
     };
 
     private Context context;
-    private clockBean bean;
+    private ClockBean bean;
     private SwitchCompat switchAuto, switchLock;
+    private VirgoColorBoard colorBoard;
 
     private VirgoTextClockView clockView;
     private TextView tvColorSelect, tvColorDefault;
     private TextView tvSizeCenter, tvSizeClock, tvOffset, tvRH, tvRM, tvRS;
     private SeekBar sbSizeCenter, sbSizeClock, sbOffset, sbRH, sbRM, sbRS;
+    private int tag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +79,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void initUi() {
         context = getApplicationContext();
+        colorBoard = new VirgoColorBoard(this);
+        colorBoard.setCallback(this);
+
         switchAuto = findViewById(R.id.switchAutoMain);
         switchLock = findViewById(R.id.switchLockMain);
 
@@ -103,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
         bean = ShareDao.getClockConfig(context);
         if(bean==null){
             Log.i(TAG, "setData: 首次进入：");
-            bean = new clockBean();
+            bean = new ClockBean();
 
             bean.setColorSelect(tvColorSelect.getText().toString());
             bean.setColorDefault(tvColorDefault.getText().toString());
@@ -114,7 +123,6 @@ public class MainActivity extends AppCompatActivity {
             bean.setrMinute(sbRM.getProgress());
             bean.setrSecond(sbRS.getProgress());
             ShareDao.setClockConfig(context, bean);
-
         }else{
             //加载本地存储
             tvColorSelect.setText(bean.getColorSelect());
@@ -137,20 +145,22 @@ public class MainActivity extends AppCompatActivity {
         tvRS.setText(String.format(getString(R.string.main_radius_second), String.valueOf(bean.getrSecond())));
 
         clockView.setConfig(bean);
-
-//        clockView.setmColorMain(Color.parseColor(tvColorSelect.getText().toString()));
-//        clockView.setmColorSecond(Color.parseColor(tvColorDefault.getText().toString()));
-//
-//        clockView.setmTextSizeMain(sbSizeClock.getProgress());
-//        clockView.setmTextSizeClock(sbSizeCenter.getProgress());
-//        clockView.setmOffset(sbOffset.getProgress());
-//        clockView.setmRadiusH(sbRH.getProgress());
-//        clockView.setmRadiusM(sbRM.getProgress());
-//        clockView.setmRadiusS(sbRS.getProgress());
     }
 
     private void setListener() {
         // TODO: 2021/4/29 颜色选择器
+        //高亮
+        tvColorSelect.setOnClickListener(v -> {
+            tag = TAG_COLOR_SELECT;
+            colorBoard.setmColor(Color.parseColor(tvColorSelect.getText().toString()));
+            colorBoard.show();
+        });
+
+        tvColorDefault.setOnClickListener(v ->{
+            tag = TAG_COLOR_DEFAULT;
+            colorBoard.setmColor(Color.parseColor(tvColorDefault.getText().toString()));
+            colorBoard.show();
+        });
 
         switchAuto.setOnCheckedChangeListener((buttonView, isChecked) -> ShareDao.setSelfAuto(context, isChecked));
 
@@ -338,7 +348,6 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -380,6 +389,20 @@ public class MainActivity extends AppCompatActivity {
             }
         } catch (Throwable e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onPick(int color) {
+        String str = "#" + Integer.toHexString(color);
+        if(tag == TAG_COLOR_SELECT){
+            clockView.setmColorMain(color);
+            tvColorSelect.setText(str);
+            bean.setColorSelect(str);
+        }else if(tag == TAG_COLOR_DEFAULT){
+            clockView.setmColorSecond(color);
+            tvColorDefault.setText(str);
+            bean.setColorDefault(str);
         }
     }
 }

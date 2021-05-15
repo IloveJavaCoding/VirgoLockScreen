@@ -6,7 +6,7 @@ import com.nepalese.virgosdk.Beans.BaseBean;
  * @author nepalese on 2021/4/29 17:38
  * @usage
  */
-public class clockBean extends BaseBean {
+public class ClockBean extends BaseBean {
     private String colorSelect;
     private String colorDefault;
     // tvSizeCenter, tvSizeClock, tvOffset, tvRH, tvRM, tvRS;
@@ -17,7 +17,7 @@ public class clockBean extends BaseBean {
     private int rMinute;
     private int rSecond;
 
-    public clockBean() {
+    public ClockBean() {
     }
 
     public String getColorSelect() {

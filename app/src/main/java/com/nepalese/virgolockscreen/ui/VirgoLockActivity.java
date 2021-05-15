@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.nepalese.virgolockscreen.R;
 import com.nepalese.virgolockscreen.data.ShareDao;
-import com.nepalese.virgolockscreen.data.clockBean;
+import com.nepalese.virgolockscreen.data.ClockBean;
 import com.nepalese.virgolockscreen.view.VirgoTextClockView;
 import com.nepalese.virgosdk.Util.WinowUtil;
 
@@ -46,7 +46,7 @@ public class VirgoLockActivity extends AppCompatActivity {
     }
 
     private void setData() {
-        clockBean bean = ShareDao.getClockConfig(context);
+        ClockBean bean = ShareDao.getClockConfig(context);
         if(bean !=null){
             clockView.setConfig(bean);
         }else{

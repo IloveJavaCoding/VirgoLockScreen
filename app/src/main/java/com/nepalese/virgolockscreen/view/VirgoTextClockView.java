@@ -18,7 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.nepalese.virgolockscreen.R;
-import com.nepalese.virgolockscreen.data.clockBean;
+import com.nepalese.virgolockscreen.data.ClockBean;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -423,7 +423,7 @@ public class VirgoTextClockView extends View {
         this.mOffset = mOffset;
     }
 
-    public void setConfig(clockBean bean){
+    public void setConfig(ClockBean bean){
         this.setmColorMain(Color.parseColor(bean.getColorSelect()));
         this.setmColorSecond(Color.parseColor(bean.getColorDefault()));
 
